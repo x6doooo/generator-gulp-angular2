@@ -1,0 +1,30 @@
+{
+  "name": "generator-gulp-angular2",
+  "version": "0.1.0",
+  "description": "Yeoman generator for Angular2 + Gulp, base on angular2-seed and generator-gulp-angular",
+  "license": "MIT",
+  "main": "app/index.js",
+  "repository": "x6doooo/generator-gulp-angular2",
+  "author": {
+    "name": "Dx. Yang",
+    "email": "x6doooo@gmail.com",
+    "url": "https://github.com/x6doooo"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^0.19.0",
+    "chalk": "^1.0.0",
+    "yosay": "^1.0.2"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
