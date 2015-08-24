@@ -1,0 +1,8 @@
+p For reward, here is a list of awesome computer scientists!
+p You want more? Add them yourself!
+p
+   input(#newname)
+   button((click)="addName(newname)") Add
+ul
+   li(*ng-for="#name of list.get()") {{name}}
+

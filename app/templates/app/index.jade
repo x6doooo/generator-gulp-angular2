@@ -1,0 +1,23 @@
+//
+   Created by yangdongxu on 15/8/24.
+
+doctype html
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        title My Angular 2 App
+        base(href="/")
+        <!-- ignore: Aplha 32 router fix -->
+        script.
+            baseElement = document.querySelector('base');baseElement.attr = baseElement.getAttribute;
+        meta(name="description" content="")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        <!-- inject:css -->
+        <!-- endinject -->
+    body
+        app Loading...
+        <!-- inject:js -->
+        <!-- endinject -->
+        script(src="/init.js")
+
