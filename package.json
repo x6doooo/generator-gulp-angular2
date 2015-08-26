@@ -1,6 +1,6 @@
 {
   "name": "generator-gulp-angular2",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Yeoman generator for Angular2 + Gulp, base on angular2-seed and generator-gulp-angular",
   "license": "MIT",
   "main": "app/index.js",
@@ -14,7 +14,7 @@
     "test": "mocha"
   },
   "files": [
-    "generators"
+    "app"
   ],
   "keywords": [
     "yeoman-generator",
