@@ -62,7 +62,7 @@ var PATH = {
     src: {
         // Order is quite important here for the HTML tag injection.
         lib: [
-            './node_modules/angular2/node_modules/traceur/bin/traceur-runtime.js',
+            './node_modules/traceur/bin/traceur-runtime.js',
             './node_modules/es6-module-loader/dist/es6-module-loader-sans-promises.js',
             './node_modules/es6-module-loader/dist/es6-module-loader-sans-promises.js.map',
             './node_modules/reflect-metadata/Reflect.js',
