@@ -18,8 +18,6 @@
     "./app/init.ts",
     "./app/services/NameList.ts",
     "./app/typings/_custom.d.ts",
-    "./tsd_typings/angular2/angular2.d.ts",
-    "./tsd_typings/angular2/router.d.ts",
     "./tsd_typings/es6-promise/es6-promise.d.ts",
     "./tsd_typings/rx/rx-lite.d.ts",
     "./tsd_typings/rx/rx.d.ts",
@@ -30,5 +28,8 @@
     "./app/**/*.ts",
     "./tsd_typings/**/*.ts"
   ],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "atom": {
+    "rewriteTsconfig": true
+  }
 }
