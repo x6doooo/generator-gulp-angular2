@@ -5,6 +5,7 @@ var bump = require('gulp-bump');
 var concat = require('gulp-concat');
 var filter = require('gulp-filter');
 var inject = require('gulp-inject');
+var rename = require('gulp-rename');
 var minifyCSS = require('gulp-minify-css');
 var minifyHTML = require('gulp-minify-html');
 var plumber = require('gulp-plumber');
@@ -39,6 +40,7 @@ var openResource = require('open');
 
 var tinylr = require('tiny-lr')();
 var connectLivereload = require('connect-livereload');
+var bowerFiles = require('main-bower-files');
 
 
 // --------------
@@ -198,6 +200,7 @@ gulp.task('build.index.dev', function () {
     var target = gulp.src(injectableDevAssetsRef(), {read: false});
     return gulp.src(PATH.dest.dev.all + '/index.html')
         .pipe(inject(target, {transform: transformPath('dev')}))
+        .pipe(inject(addBowerComponent(PATH.dest.dev.lib), {name: 'bower', relative: true}))
         .pipe(template(templateLocals()))
         .pipe(gulp.dest(PATH.dest.dev.all));
 });
@@ -305,6 +308,7 @@ gulp.task('build.index.prod', function () {
         join(PATH.dest.prod.all, '**/*.css')], {read: false});
     return gulp.src(PATH.dest.prod.all + '/index.html')
         .pipe(inject(target, {transform: transformPath('prod')}))
+        .pipe(inject(addBowerComponent(PATH.dest.prod.lib), {name: 'bower', relative: true}))
         .pipe(template(templateLocals()))
         .pipe(gulp.dest(PATH.dest.prod.all));
 });
@@ -423,6 +427,30 @@ function registerBumpTasks() {
             runSequence(semverTaskName, 'build.app.prod', done);
         });
     });
+}
+
+function addBowerComponent(path) {
+  var jsFilter = filter('*.js');
+  var cssFilter = filter('*.css');
+  return gulp.src(bowerFiles())
+    .pipe(jsFilter)
+    .pipe(concat('vendors.js'))
+    .pipe(gulp.dest(path))
+    .pipe(uglify())
+    .pipe(rename({
+        suffix: '.min'
+    }))
+    .pipe(gulp.dest(path))
+    .pipe(jsFilter.restore())
+    .pipe(cssFilter)
+    .pipe(concat('vendors.css'))
+    .pipe(gulp.dest(path))
+    .pipe(minifyCSS({keepBreaks:true}))
+    .pipe(rename({
+        suffix: '.min'
+    }))
+    .pipe(gulp.dest(path))
+    .pipe(cssFilter.restore())
 }
 
 function serveSPA(env) {
