@@ -430,6 +430,8 @@ function registerBumpTasks() {
 }
 
 function addBowerComponent(path) {
+  var jsFilter = filter('*.js');
+  var cssFilter = filter('*.css');
   return gulp.src(bowerFiles())
     .pipe(jsFilter)
     .pipe(concat('vendors.js'))
