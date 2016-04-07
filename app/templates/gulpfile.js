@@ -53,12 +53,14 @@ var PATH = {
         dev: {
             all: 'dist/dev',
             lib: 'dist/dev/lib',
+            vendor: 'dist/dev/vendor',
             ng2: 'dist/dev/lib/angular2.js',
             router: 'dist/dev/lib/router.js'
         },
         prod: {
             all: 'dist/prod',
-            lib: 'dist/prod/lib'
+            lib: 'dist/prod/lib',
+            vendor: 'dist/prod/vendor'
         }
     },
     src: {
@@ -198,9 +200,9 @@ gulp.task('build.assets.dev', [
 
 gulp.task('build.index.dev', function () {
     var target = gulp.src(injectableDevAssetsRef(), {read: false});
+    var bower = injectableBowerComponents('dev');
     return gulp.src(PATH.dest.dev.all + '/index.html')
-        .pipe(inject(target, {transform: transformPath('dev')}))
-        .pipe(inject(addBowerComponent(PATH.dest.dev.lib), {name: 'bower', relative: true}))
+        .pipe(inject(series(target, bower), { transform: transformPath('dev') }))
         .pipe(template(templateLocals()))
         .pipe(gulp.dest(PATH.dest.dev.all));
 });
@@ -304,11 +306,11 @@ gulp.task('build.assets.prod', [
 });
 
 gulp.task('build.index.prod', function () {
+    var bower = injectableBowerComponents('prod');
     var target = gulp.src([join(PATH.dest.prod.lib, 'lib.js'),
         join(PATH.dest.prod.all, '**/*.css')], {read: false});
     return gulp.src(PATH.dest.prod.all + '/index.html')
-        .pipe(inject(target, {transform: transformPath('prod')}))
-        .pipe(inject(addBowerComponent(PATH.dest.prod.lib), {name: 'bower', relative: true}))
+        .pipe(inject(series(target, bower), { transform: transformPath('prod') }))
         .pipe(template(templateLocals()))
         .pipe(gulp.dest(PATH.dest.prod.all));
 });
@@ -429,28 +431,21 @@ function registerBumpTasks() {
     });
 }
 
-function addBowerComponent(path) {
-  var jsFilter = filter('*.js');
-  var cssFilter = filter('*.css');
+function injectableBowerComponents(path) {
+
+  var jsFilter = filter('**/*.js');
+  var cssFilter = filter('**/*.css');
+
   return gulp.src(bowerFiles())
-    .pipe(jsFilter)
-    .pipe(concat('vendors.js'))
-    .pipe(gulp.dest(path))
-    .pipe(uglify())
-    .pipe(rename({
-        suffix: '.min'
-    }))
-    .pipe(gulp.dest(path))
-    .pipe(jsFilter.restore())
-    .pipe(cssFilter)
-    .pipe(concat('vendors.css'))
-    .pipe(gulp.dest(path))
-    .pipe(minifyCSS({keepBreaks:true}))
-    .pipe(rename({
-        suffix: '.min'
-    }))
-    .pipe(gulp.dest(path))
-    .pipe(cssFilter.restore())
+  .pipe(jsFilter)
+  .pipe(uglify())
+  .pipe(gulp.dest(PATH.dest[path].vendor))
+  .pipe(jsFilter.restore())
+  .pipe(cssFilter)
+  .pipe(concat('vendor.css'))
+  .pipe(minifyCSS())
+  .pipe(gulp.dest(PATH.dest[path].vendor))
+  .pipe(cssFilter.restore());
 }
 
 function serveSPA(env) {
