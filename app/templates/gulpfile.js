@@ -6,6 +6,7 @@ var concat = require('gulp-concat');
 var filter = require('gulp-filter');
 var inject = require('gulp-inject');
 var rename = require('gulp-rename');
+var flatten = require('gulp-flatten');
 var minifyCSS = require('gulp-minify-css');
 var minifyHTML = require('gulp-minify-html');
 var plumber = require('gulp-plumber');
@@ -198,7 +199,13 @@ gulp.task('build.assets.dev', [
         .pipe(gulp.dest(PATH.dest.dev.all));
 });
 
-gulp.task('build.index.dev', function () {
+gulp.task('build.fonts.dev', function () {
+  return gulp.src('./bower_components/**/*.{eot,svg,ttf,woff,woff2}')
+    .pipe(flatten())
+    .pipe(gulp.dest(path.join(PATH.dest.dev.all, 'fonts/')));
+});
+
+gulp.task('build.index.dev', ['build.fonts.dev'], function () {
     var target = gulp.src(injectableDevAssetsRef(), {read: false});
     var bower = injectableBowerComponents('dev');
     return gulp.src(PATH.dest.dev.all + '/index.html')
@@ -305,7 +312,13 @@ gulp.task('build.assets.prod', [
         .pipe(gulp.dest(PATH.dest.prod.all));
 });
 
-gulp.task('build.index.prod', function () {
+gulp.task('build.fonts.prod', function () {
+  return gulp.src('./bower_components/**/*.{eot,svg,ttf,woff,woff2}')
+    .pipe(flatten())
+    .pipe(gulp.dest(path.join(PATH.dest.prod.all, 'fonts/')));
+});
+
+gulp.task('build.index.prod', ['build.fonts.prod'], function () {
     var bower = injectableBowerComponents('prod');
     var target = gulp.src([join(PATH.dest.prod.lib, 'lib.js'),
         join(PATH.dest.prod.all, '**/*.css')], {read: false});
@@ -444,6 +457,7 @@ function injectableBowerComponents(path) {
   .pipe(cssFilter)
   .pipe(concat('vendor.css'))
   .pipe(minifyCSS())
+  .pipe(rename({ suffix: '.min' }))
   .pipe(gulp.dest(PATH.dest[path].vendor))
   .pipe(cssFilter.restore());
 }
