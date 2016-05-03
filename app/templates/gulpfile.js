@@ -7,7 +7,7 @@ var filter = require('gulp-filter');
 var inject = require('gulp-inject');
 var rename = require('gulp-rename');
 var flatten = require('gulp-flatten');
-var minifyCSS = require('gulp-minify-css');
+var cleanCSS = require('gulp-clean-css');
 var minifyHTML = require('gulp-minify-html');
 var plumber = require('gulp-plumber');
 var sourcemaps = require('gulp-sourcemaps');
@@ -307,7 +307,7 @@ gulp.task('build.assets.prod', [
         .pipe(minifyHTML(HTMLMinifierOpts))
         .pipe(filterHTML.restore())
         .pipe(filterCSS)
-        .pipe(minifyCSS())
+        .pipe(cleanCSS())
         .pipe(filterCSS.restore())
         .pipe(gulp.dest(PATH.dest.prod.all));
 });
