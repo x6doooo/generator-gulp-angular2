@@ -296,7 +296,7 @@ gulp.task('build.assets.prod', [
     <% if (props.cssPreprocessor.key === 'node-sass') { %>
         gulp.src(['./app/**/*.sass', './app/**/*.scss'])
             .pipe(sass().on('error', sass.logError))
-            .pipe(gulp.dest(PATH.dest.dev.all));
+            .pipe(gulp.dest(PATH.dest.prod.all));
 
     <% } %>
 
